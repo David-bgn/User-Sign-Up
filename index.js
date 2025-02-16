@@ -31,10 +31,15 @@ app.post("/", async (req, res) => {
   }
 
   try {
-    await db.query(
-      "INSERT INTO users (user_name, password) VALUES ($1, $2)",
-      [name, password]
-    );
+    const data = await db.query("SELECT user_name FROM users WHERE user_name = $1", [name]);
+    const arr = data.rows;
+    if (arr.length != 0) {
+      return res.status(400).send("User already exist.");
+    }
+    await db.query("INSERT INTO users (user_name, password) VALUES ($1, $2)", [
+      name,
+      password,
+    ]);
     res.redirect("/");
   } catch (err) {
     console.log(error);
