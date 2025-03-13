@@ -16,7 +16,7 @@ Installation
 
 I recommend installing the following packages:
 
-npm install express ejs pg body-parser
+npm install express ejs pg body-parser bcrypt
 
 For development, you can use nodemon (optional):
 
@@ -32,5 +32,5 @@ If using nodemon:
 
 npm nodemon index.js
 
-Thank you for visiting! 🚀
+Thank you for visiting! 
 
