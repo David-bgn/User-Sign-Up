@@ -1,0 +1,30 @@
+body {
+    background-image: url(assets/future.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+form {
+    position: absolute;
+    top: 165px;
+    left: 700px;
+}
+
+input {
+    width: 150px;
+    height: 25px;
+    border: none;
+    border-radius: 5px;
+}
+
+.btn {
+    background: linear-gradient(90deg, blue, purple);
+    color: white;
+}
