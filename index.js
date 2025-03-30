@@ -2,19 +2,26 @@ import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
 import bcrypt from "bcrypt";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-const db = new pg.Client({
-  user: "postgres",
-  host: "localhost",
-  database: "personal",
-  password: "cLšVEWťxžaPSQL",
-  port: 5432,
+// const db = new pg.Client({
+//   user: "postgres",
+//   host: "localhost",
+//   database: "personal",
+//   password: "",
+//   port: 5432,
+// });
+
+const pool = new pg.Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.DATABASE_URL?.includes("render.com") ? { rejectUnauthorized: false } : false,
 });
 
-db.connect();
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -36,7 +43,7 @@ app.post("/", async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const data = await db.query(
+    const data = await pool.query(
       "SELECT user_name FROM users WHERE user_name = $1",
       [user]
     );
@@ -45,7 +52,7 @@ app.post("/", async (req, res) => {
       return res.status(400).send("User already exist");
     }
 
-    await db.query("INSERT INTO users (user_name, password) VALUES ($1, $2)", [
+    await pool.query("INSERT INTO users (user_name, password) VALUES ($1, $2)", [
       user,
       hashedPassword,
     ]);
@@ -64,7 +71,7 @@ app.post("/login", async (req, res) => {
   }
 
   try {
-    const data = await db.query(
+    const data = await pool.query(
       "SELECT password FROM users WHERE user_name = $1",
       [user_name]
     );
@@ -81,7 +88,7 @@ app.post("/login", async (req, res) => {
       return res.status(401).send("Wrong password");
     }
   } catch (error) {
-    console.log("Error:", error);
+    console.error("ERROR IN / LOGIN:", error); // Log the error
     res.status(500).send("Internal server error");
   }
 });
