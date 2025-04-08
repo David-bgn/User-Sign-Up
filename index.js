@@ -56,7 +56,9 @@ app.post("/", async (req, res) => {
       user,
       hashedPassword,
     ]);
-    res.redirect("/login");
+    res.send(
+      '<script>alert("Registration successful!"); window.location.href = "/login";</script>'
+    );
   } catch (error) {
     console.log(error);
     res.status(500).send("Internal server error");
