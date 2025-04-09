@@ -49,7 +49,7 @@ app.post("/", async (req, res) => {
     );
     const arr = data.rows;
     if (arr.length !== 0) {
-      return res.status(400).send("User already exist");
+      return res.render("index.ejs", { error: "User already exists" });
     }
 
     await pool.query("INSERT INTO users (user_name, password) VALUES ($1, $2)", [

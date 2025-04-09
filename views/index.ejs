@@ -14,5 +14,11 @@
             <input class="btn" type="submit" value="SingUp">
         </label>
     </form>
+
+    <% if (typeof error !== 'undefined') { %>
+    <script type="text/javascript">
+      alert("<%= error %>");
+    </script>
+  <% } %>
 </body>
 </html>
